@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Toplist from 'com/toplist/toplist'
 import TopPlaylist from 'com/toplist/topplaylist'
 import Recommend from 'com/recommend/recommend'
-import Singer from 'com/singer/singer'
+import Search from 'com/search/search'
 Vue.use(Router)
 
 export default new Router({
@@ -19,9 +19,9 @@ export default new Router({
       component: Recommend
     },
     {
-      path: '/singer',
-      name: 'singer',
-      component: Singer
+      path: '/search',
+      name: 'search',
+      component: Search
     },
     {
       path: '/toplist',

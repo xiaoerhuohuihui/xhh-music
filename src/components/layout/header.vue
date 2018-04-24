@@ -1,5 +1,5 @@
 <template>
-    <h1>我是header</h1>
+    <h1>小灰灰</h1>
 </template>
 
 <script type="text/ecmascript-6">
@@ -14,6 +14,7 @@ export default {
 
 <style scoped>
 h1{
-    text-align: center
+    text-align: center;
+    color: rgb(174, 194, 199)
 }
 </style>

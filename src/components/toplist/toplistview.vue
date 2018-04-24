@@ -1,7 +1,6 @@
 <template>
     <ul>
       <li v-for="(item, index) in toplist" :key="index" @click="listid(item)">
-        <!-- <h3>{{item.topTitle}}</h3> -->
         <div><img :src="item.picUrl" :alt="item.topTitle"></div>
         <div>
           <h3>{{item.topTitle}}</h3>
@@ -53,7 +52,7 @@ li {
   display: flex;
   margin-top: 1rem;
   background-color: rgba(80, 72, 74, 0.712);
-  
+  color: rgb(174, 194, 199)
 }
 li div:first-child {
   width: 100px;

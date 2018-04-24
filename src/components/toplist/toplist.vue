@@ -1,9 +1,13 @@
 <template>
   <div>
+    <transition name='view'>
     <keep-alive>
       <top-list-view v-show="listshow" @toplistid='gettopid'></top-list-view>
     </keep-alive>
-    <router-view @listgo='changgeshow'></router-view>
+    </transition>
+    <transition name='view'>
+      <router-view @listgo='changgeshow'></router-view>
+    </transition>
   </div>
 
 </template>
@@ -25,7 +29,6 @@ export default {
   },
   methods: {
     gettopid(item){
-      // console.log(item.id)
       this.$router.push({
          path:`/toplist/topplaylist/${item.id}`
       })
@@ -39,6 +42,19 @@ export default {
 </script>
 
 <style scoped>
-
+.view-enter-active{
+  transition: all .3s ease;
+}
+.view-leave-active {
+  transition: all .5s ease;
+}
+.view-enter{
+  transform: translateX(150%);
+  opacity: 0;
+}
+.view-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
 
 </style>

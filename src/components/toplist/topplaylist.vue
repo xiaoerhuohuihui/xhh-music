@@ -1,21 +1,19 @@
 <template>
     <div class="list">
         <div class="imgdiv">
-            <span @click='goback' class="goback"> &lt; </span>
+            <span @click='goback' class="goback el-icon-arrow-left
+"> </span>
             <img :src="imgsrc" alt="">
         </div>
         <div class="music-list">
-            <!-- <div id="audio">
-                <audio ref="myaudio" :src="qqsongurl" controls='controls' autoplay></audio>
-            </div> -->
-
-            <!-- <button class="play-btn" @click="play">{{playname}}</button> -->
             <ul>
                 <li class="li-title">
                     <span>歌手名字</span>
                     <span>歌曲名字</span>
                 </li>
-                <li v-for="(n,index) in songlist" :key="index" @click="getname(n.data, index)" :class="{active:index===activeindex}">
+                <li v-for="(n,index) in songlist" :key="index" 
+                @click="getname(index)" 
+                :class="{active:index===getMusicIndex}">
                     <span>{{n.data.singer[0].name}}</span>
                     <span>{{n.data.songname}}</span>
                 </li>
@@ -25,60 +23,53 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { getMusicList } from "api/toplist";
+import { getMusicList } from "api/toplist"
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      songdata: {},
       songlist: [],
       songmid: "",
       isplay: false,
       playname: "播放",
-      activeindex: -1,
+      // activeindex: -1,
       imgsrc:''
     };
   },
   created() {
     this.getmusiclist();
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['getMusicIndex',]
+    ),
+  },
   methods: {
     getmusiclist() {
       let topUrl = getMusicList(this.$route.params.listId);
-      //   console.log(this.$route.params.listId);
       this.$axios
         .get("/api/" + topUrl)
         .then(res => {
-        //   console.log(res.data);
           this.imgsrc = res.data.topinfo.pic_h5
-          this.songdata = res.data;
           this.songlist = res.data.songlist;
         })
         .catch(err => {
           console.log(err);
         });
     },
-    getname(data, index) {
-      // console.log(event.currentTarget)
-      // event.currentTarget
-    //   this.songmid = data;
-      this.$store.commit('changeurl', data)
-      this.activeindex = index;
+    getname(index) {
+      this.$store.commit('changeMusicList', this.songlist)
+      this.$store.commit('changeMusicIndex', index)
     },
     goback() {
       this.$emit("listgo");
       this.$router.go(-1);
     }
   },
-  computed: {
-  }
+  
 };
 </script>
 
 <style scoped>
-.imgdiv {
-    /* height: 300px; */
-}
 img {
     width: 100%;
 }
@@ -95,6 +86,9 @@ img {
   position: absolute;
   top: 1rem;
   left: 1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: rgb(12, 12, 12)
 }
 * {
   padding: 0;
@@ -126,6 +120,7 @@ span {
   text-align: center;
   font-family: Georgia, "Times New Roman", Times, serif;
   padding: 5px;
+  color: rgb(174, 194, 199)
 }
 li + li span {
   /* border: sandybrown solid 1px; */

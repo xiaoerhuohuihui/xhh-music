@@ -1,123 +1,88 @@
 <template>
   <div id="app">
-    <!-- <hello></hello> -->
     <my-header></my-header>
+    <!-- <my-header @click.native="showAlter"></my-header> -->
     <my-body></my-body>
-    <div class="player" v-if="$store.state.music.songmid">
-      <div class="ablumidurl"><img :src="getablummidurl" alt=""></div>
-      <div class="songname">{{getsongname}}</div>
-      <span  @click="play">{{isplaying}}</span>
-      <audio ref="myplayer" :src="getsongurl" autoplay></audio>   
-      <!-- controls='controls' -->
-    </div>
+    <transition name='play'>
+      <Player v-if="$store.state.musicList[0]"></Player>
+    </transition>
+    
+    <transition name='alter'>
+      <Alter v-if="$store.state.alterError"></Alter>
+    </transition>
   </div>
 </template>
 
 <script>
-import MyHeader from './components/layout/header'
-import MyBody from './components/layout/body'
-
-import { mapGetters } from 'vuex'
+import MyHeader from "./components/layout/header";
+import MyBody from "./components/layout/body";
+import Player from "com/player/player";
+import Alter from "com/tools/Alter";
 
 export default {
-  name: 'App',
-  data () {
+  name: "App",
+  data() {
     return {
-      isplay:true,
-      playname:'播放',
-    }
+    };
   },
-  computed: {
-    ...mapGetters({
-      getsongurl:'getsongurl',
-      getsongname:'getsongname',
-      getablummidurl:'getablummidurl',
-    }),
-    isplaying(){
-      if(this.isplay){
-       return '暂停'
-      }else{
-        return '播放'
-      }
-    }
-  },
-  // created () {
-  //   this.play()
-  // },
   methods: {
-    play(){
-      let a = this.$refs.myplayer
-      // console.log(a.played)
-      if (!this.isplay) {
-        a.play()
-        this.isplay = true
-        // this.playname='暂停'
-      }else{
-        a.pause()
-        this.isplay = false
-        // this.playname='播放'
-      }
-    },
-    // watch: {
-    //   getsongurl:function (val) {
-    //     this.isplay = true
-    //   }
+    // showAlter() {
+    //   this.$store.commit('changeAlterError', !this.$store.state.alterError)
     // }
   },
+
   components: {
     MyHeader,
     MyBody,
+    Player,
+    Alter
   }
-
-}
+};
 </script>
 
 <style>
-  *{
-    padding: 0;
-    margin: 0;
-  }
-  ul,li{
-    list-style: none;
-  }
-  body{
-    width: 100%;
-    background: rgba(33, 33, 33, 1);
-    color: rgba(240, 255, 255, 0.705);
-  }
-  
-  .player{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    min-height: 50px;
-    background-color: rgb(221, 242, 250);
-    z-index: 9999;
-    color: black;
-  }
-  .ablumidurl{
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  .songname{
-    padding-left: 20px;
-    height: 50px;
-    position: absolute;
-    top: 0;
-    left: 50px;
-  }
-  .ablumidurl img{
-    width: 100%;
-  }
-  .player span{
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 20px;
-    background-color: rgba(114, 206, 230, 0.712);
-  }
+* {
+  padding: 0;
+  margin: 0;
+}
+ul,
+li {
+  list-style: none;
+}
+body {
+  width: 100%;
+  background: rgba(33, 33, 33, 1);
+  color: rgba(240, 255, 255, 0.705);
+}
+#app {
+  position: relative;
+}
+.alter-enter-active{
+  transition: all .3s ease;
+}
+.alter-leave-active {
+  transition: all .5s ease;
+}
+.alter-enter{
+  transform: translateY(150%);
+  opacity: 0;
+}
+.alter-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.play-enter-active{
+  transition: all .3s ease;
+}
+.play-leave-active {
+  transition: all .5s ease;
+}
+.play-enter{
+  transform: translateY(150%);
+  opacity: 0;
+}
+.play-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
 </style>
