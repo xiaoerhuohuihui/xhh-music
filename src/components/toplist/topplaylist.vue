@@ -6,7 +6,7 @@
             <img :src="imgsrc" alt="">
         </div>
         <div class="music-list">
-            <ul>
+            <!-- <ul>
                 <li class="li-title">
                     <span>歌手名字</span>
                     <span>歌曲名字</span>
@@ -17,7 +17,8 @@
                     <span>{{n.data.singer[0].name}}</span>
                     <span>{{n.data.songname}}</span>
                 </li>
-            </ul>
+            </ul> -->
+            <Songlist :songlist='songlist'></Songlist>
         </div>
     </div>
 </template>
@@ -25,16 +26,16 @@
 <script type="text/ecmascript-6">
 import { getMusicList } from "api/toplist"
 import { mapGetters } from 'vuex'
+import Songlist from 'com/tools/Songlist'
 export default {
   data() {
     return {
       songlist: [],
-      songmid: "",
-      isplay: false,
-      playname: "播放",
-      // activeindex: -1,
       imgsrc:''
     };
+  },
+  components: {
+    Songlist,
   },
   created() {
     this.getmusiclist();
@@ -45,9 +46,7 @@ export default {
   },
   methods: {
     getmusiclist() {
-      let topUrl = getMusicList(this.$route.params.listId);
-      this.$axios
-        .get("/api/" + topUrl)
+      getMusicList(this.$route.params.listId)
         .then(res => {
           this.imgsrc = res.data.topinfo.pic_h5
           this.songlist = res.data.songlist;
@@ -56,10 +55,10 @@ export default {
           console.log(err);
         });
     },
-    getname(index) {
-      this.$store.commit('changeMusicList', this.songlist)
-      this.$store.commit('changeMusicIndex', index)
-    },
+    // getname(index) {
+    //   this.$store.commit('changeMusicList', this.songlist)
+    //   this.$store.commit('changeMusicIndex', index)
+    // },
     goback() {
       this.$emit("listgo");
       this.$router.go(-1);
@@ -103,42 +102,7 @@ img {
   left: 50%;
   transform: translateX(-50%);
 }
-li {
-  display: flex;
-}
-li:first-child {
-  font-style: italic;
-  font-size: 1.2rem;
-  border: 1px solid rgba(25, 25, 25, 1);
-}
-span {
-  height: 100%;
-  flex: 1;
-  display: block;
-  box-sizing: border-box;
-  line-height: 1;
-  text-align: center;
-  font-family: Georgia, "Times New Roman", Times, serif;
-  padding: 5px;
-  color: rgb(174, 194, 199)
-}
-li + li span {
-  /* border: sandybrown solid 1px; */
-  box-sizing: border-box;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  line-height: 1.5;
-}
-li:nth-child(even) {
-  background-color: rgba(25, 25, 25, 1);
-}
-li:nth-child(odd) {
-  background-color: rgb(58, 56, 56);
-}
-.active {
-  background-color: rgba(12, 144, 153, 0.719) !important
-}
+
 .play-btn {
   position: fixed;
   bottom: 0;

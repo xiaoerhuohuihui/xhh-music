@@ -9,8 +9,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
-
-
+const axios = require('axios')
+const express = require('express')
+const app = express()
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
@@ -45,7 +46,59 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     watchOptions: {
       poll: config.dev.poll,
     },
-    disableHostCheck: true
+    disableHostCheck: true,
+    before(app){
+      app.get('/musicapi/getRecommend',(req,res)=>{
+        let url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
+        axios.get(url,{
+          params:req.query
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }),
+      app.get('/musicapi/searchMusic',(req,res)=>{
+        let url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+        axios.get(url,{
+          params:req.query
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }),
+      app.get('/musicapi/getMusicList',(req,res)=>{
+        let url = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg'
+        axios.get(url,{
+          params:req.query
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }),
+      app.get('/musicapi/getTopList',(req,res)=>{
+        let url = 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg'
+        axios.get(url,{
+          params:req.query
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
+      }),
+      app.get('/musicapi/getalbum',(req,res)=>{
+        let url = 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg'
+        axios.get(url,{
+          params:req.query
+        }).then(response=>{
+          res.json(response.data)
+        }).catch(e=>{
+          console.log(e)
+        })
+      })
+    }
   },
   plugins: [
     new webpack.DefinePlugin({

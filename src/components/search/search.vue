@@ -2,7 +2,6 @@
   <div class="search">
     <el-input placeholder="请输入内容" type='search' v-model="value" @keyup.enter.native="search">
     </el-input>
-
     <ul class="list">
       <li class="li-title">
         <span>歌手名字</span>
@@ -15,15 +14,16 @@
         <span>{{item.songname}}</span>
         <span>{{item.singer[0].name}}</span>
       </li>
-      <p class="next" v-if="result.length > 0"  @click="next">
+      
+    </ul>
+    <p class="next" v-if="result.length > 0"  @click="next">
         下一页
       </p>
-    </ul>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { searchMusicUrl } from "api/search";
+import { searchMusic } from "api/search";
 export default {
   data() {
     return {
@@ -35,10 +35,12 @@ export default {
   },
   methods: {
     search() {
-      this.$axios
-        .get("/api/" + searchMusicUrl(this.value, this.p))
+      searchMusic(this.value, this.p)
         .then(res => {
-          // console.log(res);
+          console.log('我是result');
+          
+          console.log(this.result);
+          
           this.result = res.data.data.song.list;
         })
         .catch(err => {
@@ -53,10 +55,8 @@ export default {
     },
     next(){
       this.p++
-      this.$axios
-        .get("/api/" + searchMusicUrl(this.value, this.p))
+      searchMusic(this.value, this.p)
         .then(res => {
-          // console.log(res);
           this.result = res.data.data.song.list;
         })
         .catch(err => {
@@ -93,7 +93,6 @@ span {
   padding: 5px;
 }
 li + li span {
-  /* border: sandybrown solid 1px; */
   box-sizing: border-box;
   overflow: hidden;
   white-space: nowrap;
@@ -101,7 +100,7 @@ li + li span {
   line-height: 1.5;
 }
 li:nth-child(even) {
-  background-color: rgba(25, 25, 25, 1);
+  background-color: rgb(25, 25, 25);
 }
 li:nth-child(odd) {
   background-color: rgb(58, 56, 56);
@@ -109,5 +108,6 @@ li:nth-child(odd) {
 .next{
   text-align: center;
   line-height: 1.5;
+  margin-top: -50px;
 }
 </style>

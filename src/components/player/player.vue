@@ -1,6 +1,6 @@
 <template>
     <div class="player" >
-      <div class="ablumidurl"><img :src="getablummidurl" alt=""></div>
+      <div class="ablumidurl" @click="showAblum"><img :src="getablummidurl" alt=""></div>
       <div class="songinfo">{{getsongname}}--{{getsingerame}}</div>
       <span  @click="play">{{isplaying}}</span>
       <audio ref="myplayer" 
@@ -12,7 +12,13 @@
       </audio>
       <div class="progress-father" ref="profather" @click="clickProgress">
         <div class="progress" :style="prowidth"></div>
-      </div>   
+      </div>
+      <div class='ablum' v-if="isShowAblum">
+        <span @click='goback' class="goback el-icon-arrow-left"> </span>
+        <div class="rotateAblum">
+          <img class="rotateImg" :src="getablummidurl" alt="">
+        </div>  
+      </div> 
     </div>
 </template>
 
@@ -26,7 +32,8 @@ export default {
         playname:'播放',
         prowidth:{
             width:'0%'
-        }
+        },
+        isShowAblum:false
     }
   },
   computed: {
@@ -58,12 +65,13 @@ export default {
         this.isplay = false
       }
     },
-    // musicLoad(){
-    //   let a = this.$refs.myplayer
-    //   console.log('musicLoad');
-    //   console.log(a.preload);
-      
-    // },
+    showAblum(){
+      this.isShowAblum = true
+    },
+    goback(){
+      this.isShowAblum = false
+    },
+
     changeProgress(){
         let a = this.$refs.myplayer
         if ('duration' in a && !isNaN(a.duration)) {
@@ -86,7 +94,6 @@ export default {
       if(!isNaN(a.duration)){
         a.currentTime = clickX/pfwidth * a.duration
       }
-      
     },
     errorit(){
       // console.log('歌曲暂时不能播放，为您切换到下一曲')
@@ -165,5 +172,43 @@ export default {
       left: 0;
       border: 2px solid rgb(3, 79, 99);
       /* width: 100%; */
+  }
+  .ablum{
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* z-index: 1111; */
+    width: 100%;
+    height: 100%;
+    background-color: rgb(13, 214, 204,0.5);
+  }
+  .rotateAblum{
+    width: 100%;
+    height: 80%;
+    background-color: rgb(248, 11, 11);
+    display: flex;
+    justify-content: center;
+    padding-top: 20%;
+  }
+  .ablum .goback{
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-weight: bold;
+    width: 2rem;
+    font-size: 1.5rem;
+    color: rgb(12, 12, 12);
+    background-color: transparent;
+  }
+  .rotateImg{
+    width: 80%;
+    height: 55%;
+    border-radius: 50%;
+    animation: rotateImg 10s linear infinite ;
+    /* height: 80%; */
+  }
+  @keyframes rotateImg {
+    from{transform: rotate(0deg)}
+    to{transform: rotate(360deg)}
   }
 </style>

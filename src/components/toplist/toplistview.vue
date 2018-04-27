@@ -1,5 +1,5 @@
 <template>
-    <ul>
+    <ul class="list-view">
       <li v-for="(item, index) in toplist" :key="index" @click="listid(item)">
         <div><img :src="item.picUrl" :alt="item.topTitle"></div>
         <div>
@@ -25,15 +25,9 @@ export default {
   },
   methods: {
     gettoplist() {
-      var urlString = getTopList();
-      this.$axios
-        .get('/api/'+urlString)
+      getTopList()
         .then(res => {
-          var data = res.data.replace(/MusicJsonCallback/, "");
-          data = data.slice(1, -1);
-          data = JSON.parse(data);
-            // console.log(data.data.toplist)
-          this.toplist = data.data.topList;
+          this.toplist = res.data.data.topList;
         })
         .catch(err => {
           console.log(err);
@@ -47,7 +41,9 @@ export default {
 </script>
 
 <style scoped>
-
+.list-view{
+  margin-bottom: 50px;
+}
 li {
   display: flex;
   margin-top: 1rem;

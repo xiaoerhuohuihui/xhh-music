@@ -51,7 +51,7 @@ li {
 }
 body {
   width: 100%;
-  background: rgba(33, 33, 33, 1);
+  background: rgba(0, 0, 0, 0.788);
   color: rgba(240, 255, 255, 0.705);
 }
 #app {
